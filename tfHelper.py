@@ -5,6 +5,10 @@ import tensorflow as tf
 import numpy as np
 import Image
 import os
+import pandas as pd
+
+import sklearn.preprocessing as skp
+
 
 class tfHelper:
 
@@ -79,6 +83,24 @@ class tfHelper:
 		return (np.array(X_train), np.array(Y_train))
 
 	@staticmethod
+	def get_dataset_with_folder(path, convertColor):
+		X_train = []
+		Y_train = []
+
+		for foldername in os.listdir(path):
+			if foldername[0] != '.':
+				print("Load folder: " + foldername)
+				for filename in os.listdir(path + foldername):
+					if foldername[0] != '.':
+						path2 = path + foldername + "/" + filename
+						# img = tfHelper.image_to_array_greyscale(path2)
+						img = tfHelper.image_to_array(path2, convertColor)
+						X_train.append(img)
+						Y_train.append(foldername)
+		Y_train = tfHelper.to_categorical_string(Y_train)
+		return (np.array(X_train), np.array(Y_train))
+
+	@staticmethod
 	def get_dataset_with_once_folder(name, path, convertColor):
 		X_train = None
 		Y_train = None
@@ -95,6 +117,13 @@ class tfHelper:
 	###########################################################################
 	################################### ELSE ##################################
 	###########################################################################
+
+	@staticmethod
+	def to_categorical_string(array):
+		le = skp.LabelEncoder().fit(array)
+		array = le.transform(array)
+		array = pd.get_dummies(array)
+		return array
 
 	@staticmethod
 	def log_level_decrease():

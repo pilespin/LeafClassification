@@ -30,9 +30,13 @@ def load_data_train():
 	X_test = X_train[:split]
 	X_train = X_train[split:]
 
+	# print (Y_train)
+
 	le = skp.LabelEncoder().fit(Y_train)
 	Y_train = le.transform(Y_train)
+	print (Y_train)
 	Y_train = pd.get_dummies(Y_train)
+	# print (Y_train)
 
 	Y_test = Y_train[:split]
 	Y_train = Y_train[split:]
