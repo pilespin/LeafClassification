@@ -5,7 +5,11 @@ import numpy as np
 # from sklearn import preprocessing
 import sklearn.preprocessing as skp
 
-
+def normalize(array):
+	array = array.reshape(array.shape[0], 100, 100, 1)
+	array = array.astype('float32')
+	array /= 255
+	return array
 
 def load_data_train():
 
@@ -63,7 +67,7 @@ def load_data_predict():
 
 	X_test = X_test_df.values
 
-	return (X_test, X_id, label)
+	return (X_test, test_df['id'], label)
 
 
 def load_data():
